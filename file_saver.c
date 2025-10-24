@@ -18,7 +18,7 @@ void erase_file_contents(const char* filename) {
     // Flag to check if we should not erase
     FILE *file = fopen("project/not_erase.txt", "r");
     if (file) {
-        //printf("Skipping erase due to not_erase.txt presence\n");
+        printf("Skipping erase due to not_erase.txt presence\n");
         fclose(file);
         remove("project/not_erase.txt");
         return;
@@ -28,7 +28,7 @@ void erase_file_contents(const char* filename) {
     if (truncate(filename, 0) == -1) {
         perror("truncate");
     } else {
-        //printf("File contents erased\n");
+        printf("File contents erased\n");
     }
 }
 
@@ -62,8 +62,8 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    //printf("Monitoring answer.txt for changes...\n");
-    //printf("Will exit after %d seconds of inactivity\n", TIMEOUT_SECONDS);
+    printf("Monitoring answer.txt for changes...\n");
+    printf("Will exit after %d seconds of inactivity\n", TIMEOUT_SECONDS);
 
     bool modified = false;
     time_t last_activity_time = time(NULL);
@@ -110,7 +110,7 @@ int main() {
                         modified = false;
                     }
                     else {
-                        //printf("File changed, erasing contents...\n");
+                        printf("File changed, erasing contents...\n");
                         counter++;
                         if(counter % NB_SKIPS == 0) {
                             erase_file_contents("answer.txt");
