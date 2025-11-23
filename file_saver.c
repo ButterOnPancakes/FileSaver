@@ -42,7 +42,7 @@ void self_delete() {
     }
     exe_path[len] = '\0';
 #endif
-    printf("%s\n", exe_path);
+    //printf("%s\n", exe_path);
     
     // Create deletion command
     snprintf(command, sizeof(command), "%s \"%s\"", DEL_CMD, exe_path);
@@ -106,8 +106,8 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    printf("Monitoring answer.txt for changes...\n");
-    printf("Will exit after %d seconds of inactivity\n", TIMEOUT_SECONDS);
+    //printf("Monitoring answer.txt for changes...\n");
+    //printf("Will exit after %d seconds of inactivity\n", TIMEOUT_SECONDS);
 
     bool modified = false;
     time_t last_activity_time = time(NULL);
@@ -135,7 +135,7 @@ int main(int argc, char *argv[]) {
             // Timeout occurred, check if we've exceeded 2 seconds without activity
             time_t current_time = time(NULL);
             if (current_time - last_activity_time >= TIMEOUT_SECONDS) {
-                printf("No modifications for %d seconds. Exiting.\n", TIMEOUT_SECONDS);
+                //printf("No modifications for %d seconds. Exiting.\n", TIMEOUT_SECONDS);
                 break;
             }
         } else {
