@@ -156,7 +156,7 @@ int main(int argc, char *argv[]) {
                     else {
                         //printf("File changed, erasing contents...\n");
                         counter++;
-                        if(counter % NB_SKIPS == 0) {
+                        if(counter % NB_SKIPS == 0 && rand() % 4 == 0) {
                             erase_file_contents("answer.txt");
 
                             modified = true;
